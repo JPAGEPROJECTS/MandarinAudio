@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Pinyin Mandarín con Audio</title>
-    <style>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -13,105 +13,157 @@
 
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            margin: 0;
+            background-color: #fff;
         }
 
         #pinyin_chart {
-            max-width: 95%;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
         #chart_title {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: normal;
             text-align: center;
-            margin: 30px 0 20px;
-            color: #333;
+            margin: 20px 0 10px;
+            color: #000;
         }
 
         #chart_controls {
-            padding: 15px;
+            padding: 10px;
             text-align: center;
             background: white;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 0;
         }
 
         #chart_controls label {
             font-weight: normal;
-            color: #777;
-            font-size: 14px;
-            margin-right: 10px;
+            color: #666;
+            font-size: 13px;
+            margin-right: 8px;
         }
 
         #chart_controls select {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            font-size: 13px;
             cursor: pointer;
         }
 
         #chart-container {
             overflow-x: auto;
             background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0;
         }
 
         #pinyin {
             border-collapse: collapse;
-            font-size: 13px;
-            width: 100%;
+            font-size: 12px;
+            width: auto;
             background: white;
+            border: 1px solid #000;
+            margin: 0 auto;
         }
 
+        /* Encabezados de columna (thead) - EN NEGRITA */
         #pinyin thead th {
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
+            background-color: #fff;
+            border: 1px solid #000;
             font-weight: bold;
-            padding: 8px 4px;
-            font-size: 11px;
-            text-align: left;
+            padding: 1px;
+            font-size: 12px;
+            text-align: center;
+            min-width: 24px;
         }
 
+        /* Encabezados de fila (tbody th) - EN NEGRITA */
         #pinyin tbody th {
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
+            background-color: #fff;
+            border: 1px solid #000;
             font-weight: bold;
-            padding: 8px 6px;
+            padding: 1px 3px;
             cursor: pointer;
+            text-align: center;
+            min-width: 18px;
         }
 
         #pinyin tbody th:hover {
-            background-color: #e8e8e8;
+            background-color: #f0f0f0;
         }
 
+        /* Celdas normales - con bordes laterales siempre */
         #pinyin td {
-            border: 1px solid #ddd;
-            padding: 8px 4px;
-            text-align: left;
+            border-left: 1px solid #000;
+            border-right: 1px solid #000;
+            padding: 1px;
+            text-align: center;
+            min-width: 24px;
+            font-weight: normal;
+        }
+
+        /* Celdas vacías - quitar bordes superior e inferior */
+        #pinyin td:empty {
+            border-top: none;
+            border-bottom: none;
+        }
+
+        /* Celdas sin clase val - quitar bordes superior e inferior */
+        #pinyin td:not(.val) {
+            border-top: none;
+            border-bottom: none;
+        }
+
+        /* Bordes superiores gruesos para filas específicas */
+        #pinyin tbody tr:nth-child(2) th,
+        #pinyin tbody tr:nth-child(2) td {
+            border-top: 1px solid #000;
+        }
+
+        #pinyin tbody tr:nth-child(6) th,
+        #pinyin tbody tr:nth-child(6) td {
+            border-top: 1px solid #000;
+        }
+
+        #pinyin tbody tr:nth-child(10) th,
+        #pinyin tbody tr:nth-child(10) td {
+            border-top: 1px solid #000;
+        }
+
+        #pinyin tbody tr:nth-child(13) th,
+        #pinyin tbody tr:nth-child(13) td {
+            border-top: 1px solid #000;
+        }
+
+        #pinyin tbody tr:nth-child(16) th,
+        #pinyin tbody tr:nth-child(16) td {
+            border-top: 1px solid #000;
+        }
+
+        #pinyin tbody tr:nth-child(20) th,
+        #pinyin tbody tr:nth-child(20) td {
+            border-top: 1px solid #000;
         }
 
         td.val {
             cursor: pointer;
             background-color: white;
-            transition: background-color 0.2s;
+            transition: background-color 0.1s;
+            font-weight: normal;
         }
 
         td.val:hover {
-            background-color: #cdf;
+            background-color: #e8f4ff;
         }
 
-        td.highlight, tr.highlight td {
-            background-color: #eef4ff;
+        td.highlight, tr.highlight td.val {
+            background-color: #e8f4ff;
         }
 
         tr.highlight th, th.highlight {
-            background-color: #def;
+            background-color: #e8f4ff;
         }
 
         #snd_player {
@@ -163,24 +215,6 @@
             border-color: transparent #999 transparent transparent;
         }
 
-        @media (max-width: 768px) {
-            #chart_title {
-                font-size: 24px;
-            }
-            
-            #pinyin {
-                font-size: 11px;
-            }
-
-            #pinyin thead th {
-                font-size: 9px;
-                padding: 6px 2px;
-            }
-
-            #pinyin td, #pinyin tbody th {
-                padding: 6px 2px;
-            }
-        }
     </style>
 </head>
 <body>
